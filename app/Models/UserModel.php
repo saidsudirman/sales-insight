@@ -16,8 +16,4 @@ class Kategori extends Model
         'status' => 'boolean',
     ];
 
-    public function produks()
-    {
-        return $this->hasMany(Produk::class);
-    }
 }
