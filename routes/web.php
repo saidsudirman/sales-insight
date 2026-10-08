@@ -1,15 +1,16 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (auth()->check()) {
-        if (auth()->user()->role === 'admin') {
+    if (Auth::check()) {
+        if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
 
-        if (auth()->user()->role === 'pemilik') {
+        if (Auth::user()->role === 'pemilik') {
             return redirect()->route('pemilik.dashboard');
         }
     }
