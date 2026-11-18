@@ -25,10 +25,16 @@
             --background: #F8FAFC;
             --text: #1E293B;
             --muted: #94A3B8;
+            --border: #E2E8F0;
         }
 
         * {
             font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html, body {
+            min-height: 100%;
+            margin: 0;
         }
 
         body {
@@ -37,21 +43,47 @@
             font-size: 14px;
         }
 
-        .sidebar {
-            width: 260px;
-            background: var(--sidebar);
-            color: white;
-            border: none;
+        /* =================================
+           MAIN LAYOUT
+        ================================= */
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
         }
 
-        .sidebar .offcanvas-body {
+        .main-wrapper {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            flex: 1;
+            min-width: 0;
+            min-height: 100vh;
         }
 
+        /* =================================
+           SIDEBAR
+        ================================= */
+
+        .sidebar {
+            width: 260px;
+            min-width: 260px;
+            height: 100vh;
+            flex-shrink: 0;
+            background: var(--sidebar) !important;
+            color: #FFFFFF;
+            border: none !important;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Brand */
+
         .brand {
-            padding: 24px 22px;
+            height: 90px;
+            min-height: 90px;
+            padding: 20px 22px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -60,8 +92,9 @@
         .brand-icon {
             width: 42px;
             height: 42px;
+            min-width: 42px;
             background: var(--primary);
-            color: white;
+            color: #FFFFFF;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -73,6 +106,7 @@
             font-size: 19px;
             font-weight: 800;
             letter-spacing: 1px;
+            line-height: 1.4;
         }
 
         .brand-subtitle {
@@ -81,8 +115,22 @@
             letter-spacing: 2px;
         }
 
+        /* Sidebar Body */
+
+        .sidebar .offcanvas-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-height: 0;
+            padding: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--sidebar);
+        }
+
         .sidebar-menu {
-            padding: 10px 14px;
+            padding: 10px 14px 20px;
+            flex: 1 0 auto;
         }
 
         .menu-label {
@@ -90,146 +138,338 @@
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.3px;
-            padding: 15px 10px 8px;
+            padding: 15px 10px 9px;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 13px;
+            width: 100%;
+            min-height: 42px;
+            padding: 11px 13px;
             margin-bottom: 5px;
             color: #CBD5E1;
             text-decoration: none;
+            border: none;
             border-radius: 8px;
+            background: transparent;
             font-size: 13px;
             font-weight: 500;
-            transition: .2s;
+            text-align: left;
+            line-height: 1.5;
+            transition: all .2s ease;
+            cursor: pointer;
         }
 
         .sidebar-link i {
             width: 19px;
+            min-width: 19px;
             text-align: center;
             font-size: 15px;
         }
 
         .sidebar-link:hover {
             background: var(--sidebar-hover);
-            color: white;
+            color: #FFFFFF;
         }
 
         .sidebar-link.active {
             background: var(--primary);
-            color: white;
+            color: #FFFFFF;
             font-weight: 700;
         }
 
+        /* Sidebar Footer */
+
         .sidebar-footer {
+            width: 100%;
+            flex-shrink: 0;
             margin-top: auto;
-            padding: 16px;
+            padding: 14px 14px 18px;
+            background: var(--sidebar);
             border-top: 1px solid #334155;
         }
 
-        .main-wrapper {
-            min-width: 0;
-            flex: 1;
+        .sidebar-footer form {
+            width: 100%;
+            margin: 0;
         }
+
+        .sidebar-footer .sidebar-link {
+            margin: 0;
+        }
+
+        .sidebar-footer .sidebar-link:hover {
+            background: var(--sidebar-hover) !important;
+            color: #FFFFFF !important;
+        }
+
+        .sidebar-copyright {
+            text-align: center;
+            color: #94A3B8;
+            font-size: 10px;
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        /* =================================
+           NAVBAR
+        ================================= */
 
         .topbar {
             height: 72px;
-            background: white;
-            border-bottom: 1px solid #E2E8F0;
+            min-height: 72px;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border);
             padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .page-content {
-            padding: 28px;
+        .topbar-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
         }
 
-        .page-heading {
-            font-size: 23px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .page-description {
-            color: #94A3B8;
-            font-size: 12px;
+        .topbar-breadcrumb {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 3px;
         }
 
         .profile-avatar {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
             border-radius: 50%;
             background: #F3EBD0;
             color: var(--primary-dark);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 14px;
             font-weight: 800;
         }
 
         .user-name {
             font-size: 12px;
             font-weight: 700;
+            color: var(--text);
         }
 
         .user-role {
             font-size: 10px;
-            color: #94A3B8;
+            color: var(--muted);
+            margin-top: 2px;
         }
+
+        .btn-sidebar-toggle {
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #FFFFFF;
+            color: var(--text);
+        }
+
+        .btn-sidebar-toggle:hover {
+            background: #F1F5F9;
+        }
+
+        /* =================================
+           PAGE CONTENT
+        ================================= */
+
+        .page-content {
+            flex: 1 0 auto;
+            padding: 28px;
+            min-width: 0;
+        }
+
+        .page-heading {
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .page-description {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* =================================
+           BUTTON
+        ================================= */
 
         .btn-primary-custom {
             background: var(--primary);
-            color: white;
-            border: none;
+            color: #FFFFFF;
+            border: 1px solid var(--primary);
         }
 
-        .btn-primary-custom:hover {
+        .btn-primary-custom:hover,
+        .btn-primary-custom:focus {
             background: var(--primary-dark);
-            color: white;
+            color: #FFFFFF;
+            border-color: var(--primary-dark);
         }
+
+        /* =================================
+           MAIN FOOTER
+        ================================= */
 
         .main-footer {
+            min-height: 60px;
             padding: 18px 28px;
-            color: #94A3B8;
+            color: var(--muted);
             font-size: 11px;
-            border-top: 1px solid #E2E8F0;
-            background: white;
+            border-top: 1px solid var(--border);
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
+        /* =================================
+           RESPONSIVE DESKTOP
+        ================================= */
+
+        @media (min-width: 992px) {
+
+            .sidebar {
+                position: sticky;
+                top: 0;
+                height: 100vh !important;
+                min-height: 100vh;
+                visibility: visible !important;
+                transform: none !important;
+            }
+
+            .sidebar .offcanvas-header {
+                display: none !important;
+            }
+
+            .sidebar > .brand {
+                display: flex !important;
+            }
+
+            .sidebar .offcanvas-body {
+                display: flex !important;
+                height: auto;
+                flex: 1 1 auto;
+            }
+        }
+
+        /* =================================
+           RESPONSIVE MOBILE
+        ================================= */
+
         @media (max-width: 991.98px) {
-            .page-content {
-                padding: 20px 15px;
+
+            .sidebar {
+                width: 280px;
+                min-width: 280px;
+                height: 100vh !important;
+                max-width: 85vw;
+                border: none !important;
+            }
+
+            .sidebar .offcanvas-header {
+                display: flex;
+                min-height: 75px;
+                padding: 15px 20px;
+                background: var(--sidebar);
+                border-bottom: 1px solid #334155 !important;
+            }
+
+            .sidebar .offcanvas-header .brand {
+                height: auto;
+                min-height: 0;
+                padding: 0;
+            }
+
+            .sidebar > .brand {
+                display: none !important;
+            }
+
+            .sidebar .offcanvas-body {
+                display: flex;
+                height: auto;
+                flex: 1 1 auto;
             }
 
             .topbar {
-                padding: 0 15px;
+                padding: 0 16px;
+            }
+
+            .page-content {
+                padding: 22px 16px;
+            }
+
+            .main-footer {
+                padding: 16px;
             }
         }
+
+        @media (max-width: 575.98px) {
+
+            .topbar {
+                height: 65px;
+                min-height: 65px;
+            }
+
+            .page-heading {
+                font-size: 20px;
+            }
+
+            .main-footer {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
     </style>
 
     @stack('styles')
+
 </head>
 
 <body>
 
-<div class="d-flex min-vh-100">
+<div class="app-container">
 
-    <!-- SIDEBAR -->
+    <!-- =================================
+         SIDEBAR
+    ================================== -->
+
     <aside class="offcanvas-lg offcanvas-start sidebar"
            tabindex="-1"
-           id="sidebar">
+           id="sidebar"
+           aria-label="Sidebar Navigation">
 
-        <div class="offcanvas-header border-bottom border-secondary">
-            <div class="brand p-0">
+        <!-- MOBILE BRAND -->
+        <div class="offcanvas-header">
+
+            <div class="brand">
+
                 <div class="brand-icon">
                     <i class="fa-solid fa-chart-line"></i>
                 </div>
+
                 <div>
                     <div class="brand-name">MIYA</div>
                     <div class="brand-subtitle">SALES INSIGHT</div>
                 </div>
+
             </div>
 
             <button type="button"
@@ -237,136 +477,171 @@
                     data-bs-dismiss="offcanvas"
                     aria-label="Close">
             </button>
+
         </div>
 
+        <!-- DESKTOP BRAND -->
         <div class="brand d-none d-lg-flex">
+
             <div class="brand-icon">
                 <i class="fa-solid fa-chart-line"></i>
             </div>
+
             <div>
                 <div class="brand-name">MIYA</div>
                 <div class="brand-subtitle">SALES INSIGHT</div>
             </div>
+
         </div>
 
-        <div class="offcanvas-body p-0">
+        <!-- SIDEBAR CONTENT -->
+        <div class="offcanvas-body">
 
             <nav class="sidebar-menu">
 
+                <!-- MENU UTAMA -->
                 <div class="menu-label">MENU UTAMA</div>
 
                 <a href="{{ route('admin.dashboard') }}"
                    class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+
                     <i class="fa-solid fa-house"></i>
-                    Dashboard
+                    <span>Dashboard</span>
+
                 </a>
 
+                <!-- MASTER DATA -->
                 <div class="menu-label">MASTER DATA</div>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-tags"></i>
-                    Kategori
+                    <span>Kategori</span>
                 </a>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-box"></i>
-                    Produk
+                    <span>Produk</span>
                 </a>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-ruler"></i>
-                    Ukuran
+                    <span>Ukuran</span>
                 </a>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-palette"></i>
-                    Warna
+                    <span>Warna</span>
                 </a>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-layer-group"></i>
-                    Varian Produk
+                    <span>Varian Produk</span>
                 </a>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-users"></i>
-                    Pelanggan
+                    <span>Pelanggan</span>
                 </a>
 
+                <!-- PENJUALAN -->
                 <div class="menu-label">PENJUALAN</div>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-cart-shopping"></i>
-                    Transaksi
+                    <span>Transaksi</span>
                 </a>
 
                 <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-clock-rotate-left"></i>
-                    Riwayat Transaksi
+                    <span>Riwayat Transaksi</span>
                 </a>
 
             </nav>
 
+            <!-- SIDEBAR FOOTER -->
             <div class="sidebar-footer">
+
                 <form action="{{ route('logout') }}" method="POST">
+
                     @csrf
 
-                    <button type="submit"
-                            class="sidebar-link border-0 bg-transparent w-100 text-start">
+                    <button type="submit" class="sidebar-link">
+
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        Keluar
+
+                        <span>Keluar</span>
+
                     </button>
+
                 </form>
 
-                <div class="text-center mt-3">
-                    <small class="text-secondary">
-                        MIYA Sales Insight &copy; {{ date('Y') }}
-                    </small>
+                <div class="sidebar-copyright">
+                    MIYA Sales Insight<br>
+                    &copy; {{ date('Y') }} All Rights Reserved
                 </div>
+
             </div>
 
         </div>
+
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-wrapper d-flex flex-column">
+    <!-- =================================
+         MAIN WRAPPER
+    ================================== -->
+
+    <div class="main-wrapper">
 
         <!-- NAVBAR -->
-        <nav class="topbar d-flex align-items-center justify-content-between">
+        <nav class="topbar">
 
             <div class="d-flex align-items-center gap-3">
 
-                <button class="btn btn-light d-lg-none"
+                <!-- MOBILE TOGGLE -->
+                <button class="btn-sidebar-toggle d-lg-none"
                         type="button"
                         data-bs-toggle="offcanvas"
-                        data-bs-target="#sidebar">
+                        data-bs-target="#sidebar"
+                        aria-controls="sidebar"
+                        aria-label="Buka menu">
+
                     <i class="fa-solid fa-bars"></i>
+
                 </button>
 
                 <div>
-                    <div class="fw-bold">
+
+                    <div class="topbar-title">
                         @yield('page-title', 'Dashboard')
                     </div>
-                    <small class="text-secondary">
+
+                    <div class="topbar-breadcrumb">
                         MIYA / @yield('breadcrumb', 'Dashboard')
-                    </small>
+                    </div>
+
                 </div>
 
             </div>
 
+            <!-- PROFILE -->
             <div class="d-flex align-items-center gap-3">
 
                 <div class="text-end d-none d-sm-block">
+
                     <div class="user-name">
                         {{ auth()->user()->name }}
                     </div>
+
                     <div class="user-role">
-                        Administrator
+                        {{ ucfirst(auth()->user()->role) }}
                     </div>
+
                 </div>
 
                 <div class="profile-avatar">
+
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+
                 </div>
 
             </div>
@@ -374,25 +649,30 @@
         </nav>
 
         <!-- PAGE CONTENT -->
-        <main class="page-content flex-grow-1">
+        <main class="page-content">
 
             @yield('content')
 
         </main>
 
-        <!-- FOOTER -->
+        <!-- MAIN FOOTER -->
         <footer class="main-footer">
-            <div class="d-flex justify-content-between flex-wrap gap-2">
-                <span>Copyright &copy; {{ date('Y') }} MIYA Sales Insight.</span>
-                <span>Sales Management System</span>
-            </div>
+
+            <span>
+                Copyright &copy; {{ date('Y') }} MIYA Sales Insight.
+            </span>
+
+            <span>
+                Sales Management System
+            </span>
+
         </footer>
 
     </div>
 
 </div>
 
-<!-- Bootstrap JS -->
+<!-- BOOTSTRAP JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @stack('scripts')
