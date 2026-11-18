@@ -513,7 +513,7 @@
                 <!-- MASTER DATA -->
                 <div class="menu-label">MASTER DATA</div>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('admin.kategoris.index') }}" class="sidebar-link">
                     <i class="fa-solid fa-tags"></i>
                     <span>Kategori</span>
                 </a>
@@ -523,7 +523,7 @@
                     <span>Produk</span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('admin.ukurans.index') }}" class="sidebar-link">
                     <i class="fa-solid fa-ruler"></i>
                     <span>Ukuran</span>
                 </a>

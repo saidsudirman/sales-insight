@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\UkuranController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -35,9 +37,25 @@ Route::middleware('auth')->group(function () {
         ->name('admin.')
         ->middleware('role:admin')
         ->group(function () {
+
             Route::get('/dashboard', function () {
                 return view('admin.dashboard');
             })->name('dashboard');
+
+            Route::patch('/kategoris/{kategori}/toggle-status', [
+                KategoriController::class,
+                'toggleStatus'
+            ])->name('kategoris.toggle-status');
+
+            Route::resource('kategoris', KategoriController::class)
+                ->except(['show']);
+                Route::patch('/ukurans/{ukuran}/toggle-status', [
+    UkuranController::class,
+    'toggleStatus'
+])->name('ukurans.toggle-status');
+
+Route::resource('ukurans', UkuranController::class)
+    ->except(['show']);
         });
 
     Route::prefix('pemilik')
