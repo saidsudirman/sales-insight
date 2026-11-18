@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\LaporanPenjualanController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\UkuranController;
@@ -98,6 +99,16 @@ Route::middleware('auth')->group(function () {
                 ->name('import-penjualan.prepare-master');
             Route::post('/import-penjualan/confirm', [ImportPenjualanController::class, 'confirmImport'])
                 ->name('import-penjualan.confirm');
+            Route::get('/laporan-penjualan', [LaporanPenjualanController::class, 'index'])
+                ->name('laporan-penjualan.index');
+            Route::get('/laporan-penjualan/export-excel', [
+                LaporanPenjualanController::class,
+                'exportExcel'
+            ])->name('laporan-penjualan.export-excel');
+            Route::get('/laporan-penjualan/export-pdf', [
+    LaporanPenjualanController::class,
+    'exportPdf'
+])->name('laporan-penjualan.export-pdf');
         });
 
     Route::prefix('pemilik')

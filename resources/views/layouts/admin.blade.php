@@ -553,6 +553,11 @@
                         <span>Transaksi</span>
                     </a>
 
+                    <a href="{{ route('admin.laporan-penjualan.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Laporan Penjualan</span>
+                    </a>
+
                     <a href="#" class="sidebar-link">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                         <span>Riwayat Transaksi</span>
