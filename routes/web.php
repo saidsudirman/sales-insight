@@ -95,7 +95,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/import-penjualan/preview', [ImportPenjualanController::class, 'preview'])
                 ->name('import-penjualan.preview');
-
+            Route::post('/import-penjualan/prepare-master', [ImportPenjualanController::class, 'prepareMasterData'])
+                ->name('import-penjualan.prepare-master');
         });
 
     Route::prefix('pemilik')

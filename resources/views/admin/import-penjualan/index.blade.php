@@ -10,7 +10,7 @@
         <div class="mb-4">
             <h4 class="fw-bold mb-1">Import Data Penjualan</h4>
             <p class="text-muted mb-0">
-                Masukkan data penjualan historis UMKM SAID melalui file Excel atau CSV.
+                Masukkan data penjualan historis UMKM MIYA melalui file Excel atau CSV.
             </p>
         </div>
 
