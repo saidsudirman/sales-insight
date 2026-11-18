@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UkuranController;
 use App\Http\Controllers\Admin\VarianProdukController;
 use App\Http\Controllers\Admin\WarnaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ImportPenjualanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +84,18 @@ Route::middleware('auth')->group(function () {
                 ->except(['show']);
             Route::resource('pelanggans', PelangganController::class)
                 ->except(['show']);
+            Route::get('/import-penjualan', [ImportPenjualanController::class, 'index'])
+                ->name('import-penjualan.index');
+
+            Route::get('/import-penjualan/template', [ImportPenjualanController::class, 'downloadTemplate'])
+                ->name('import-penjualan.template');
+
+            Route::post('/import-penjualan/upload', [ImportPenjualanController::class, 'upload'])
+                ->name('import-penjualan.upload');
+
+            Route::get('/import-penjualan/preview', [ImportPenjualanController::class, 'preview'])
+                ->name('import-penjualan.preview');
+
         });
 
     Route::prefix('pemilik')

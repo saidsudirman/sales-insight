@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
@@ -32,7 +33,8 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        html, body {
+        html,
+        body {
             min-height: 100%;
             margin: 0;
         }
@@ -358,7 +360,7 @@
                 display: none !important;
             }
 
-            .sidebar > .brand {
+            .sidebar>.brand {
                 display: flex !important;
             }
 
@@ -397,7 +399,7 @@
                 padding: 0;
             }
 
-            .sidebar > .brand {
+            .sidebar>.brand {
                 display: none !important;
             }
 
@@ -436,7 +438,6 @@
                 text-align: center;
             }
         }
-
     </style>
 
     @stack('styles')
@@ -445,21 +446,38 @@
 
 <body>
 
-<div class="app-container">
+    <div class="app-container">
 
-    <!-- =================================
+        <!-- =================================
          SIDEBAR
     ================================== -->
 
-    <aside class="offcanvas-lg offcanvas-start sidebar"
-           tabindex="-1"
-           id="sidebar"
-           aria-label="Sidebar Navigation">
+        <aside class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebar" aria-label="Sidebar Navigation">
 
-        <!-- MOBILE BRAND -->
-        <div class="offcanvas-header">
+            <!-- MOBILE BRAND -->
+            <div class="offcanvas-header">
 
-            <div class="brand">
+                <div class="brand">
+
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <div>
+                        <div class="brand-name">MIYA</div>
+                        <div class="brand-subtitle">SALES INSIGHT</div>
+                    </div>
+
+                </div>
+
+                <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas"
+                    aria-label="Close">
+                </button>
+
+            </div>
+
+            <!-- DESKTOP BRAND -->
+            <div class="brand d-none d-lg-flex">
 
                 <div class="brand-icon">
                     <i class="fa-solid fa-chart-line"></i>
@@ -472,210 +490,192 @@
 
             </div>
 
-            <button type="button"
-                    class="btn-close btn-close-white d-lg-none"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close">
-            </button>
+            <!-- SIDEBAR CONTENT -->
+            <div class="offcanvas-body">
 
-        </div>
+                <nav class="sidebar-menu">
 
-        <!-- DESKTOP BRAND -->
-        <div class="brand d-none d-lg-flex">
+                    <!-- MENU UTAMA -->
+                    <div class="menu-label">MENU UTAMA</div>
 
-            <div class="brand-icon">
-                <i class="fa-solid fa-chart-line"></i>
-            </div>
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
 
-            <div>
-                <div class="brand-name">MIYA</div>
-                <div class="brand-subtitle">SALES INSIGHT</div>
-            </div>
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
 
-        </div>
+                    </a>
 
-        <!-- SIDEBAR CONTENT -->
-        <div class="offcanvas-body">
+                    <!-- MASTER DATA -->
+                    <div class="menu-label">MASTER DATA</div>
 
-            <nav class="sidebar-menu">
+                    <a href="{{ route('admin.kategoris.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>Kategori</span>
+                    </a>
 
-                <!-- MENU UTAMA -->
-                <div class="menu-label">MENU UTAMA</div>
+                    <a href="{{ route('admin.produks.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-box"></i>
+                        <span>Produk</span>
+                    </a>
 
-                <a href="{{ route('admin.dashboard') }}"
-                   class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('admin.ukurans.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-ruler"></i>
+                        <span>Ukuran</span>
+                    </a>
 
-                    <i class="fa-solid fa-house"></i>
-                    <span>Dashboard</span>
+                    <a href="{{ route('admin.warnas.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-palette"></i>
+                        <span>Warna</span>
+                    </a>
 
-                </a>
+                    <a href="{{ route('admin.varian-produks.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Varian Produk</span>
+                    </a>
 
-                <!-- MASTER DATA -->
-                <div class="menu-label">MASTER DATA</div>
+                    <a href="{{ route('admin.pelanggans.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Pelanggan</span>
+                    </a>
 
-                <a href="{{ route('admin.kategoris.index') }}" class="sidebar-link">
-                    <i class="fa-solid fa-tags"></i>
-                    <span>Kategori</span>
-                </a>
+                    <!-- PENJUALAN -->
+                    <div class="menu-label">PENJUALAN</div>
 
-                <a href="{{ route('admin.produks.index') }}" class="sidebar-link">
-                    <i class="fa-solid fa-box"></i>
-                    <span>Produk</span>
-                </a>
 
-                <a href="{{ route('admin.ukurans.index') }}" class="sidebar-link">
-                    <i class="fa-solid fa-ruler"></i>
-                    <span>Ukuran</span>
-                </a>
+                    <a href="{{ route('admin.import-penjualan.index') }}" class="sidebar-link">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span>Import Data Penjualan</span>
+                    </a>
 
-                <a href="{{ route('admin.warnas.index') }}" class="sidebar-link">
-                    <i class="fa-solid fa-palette"></i>
-                    <span>Warna</span>
-                </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span>Transaksi</span>
+                    </a>
 
-                <a href="{{ route('admin.varian-produks.index') }}" class="sidebar-link">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>Varian Produk</span>
-                </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Riwayat Transaksi</span>
+                    </a>
 
-                <a href="{{ route('admin.pelanggans.index') }}" class="sidebar-link">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Pelanggan</span>
-                </a>
 
-                <!-- PENJUALAN -->
-                <div class="menu-label">PENJUALAN</div>
+                </nav>
 
-                <a href="#" class="sidebar-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span>Transaksi</span>
-                </a>
+                <!-- SIDEBAR FOOTER -->
+                <div class="sidebar-footer">
 
-                <a href="#" class="sidebar-link">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                    <span>Riwayat Transaksi</span>
-                </a>
+                    <form action="{{ route('logout') }}" method="POST">
 
-            </nav>
+                        @csrf
 
-            <!-- SIDEBAR FOOTER -->
-            <div class="sidebar-footer">
+                        <button type="submit" class="sidebar-link">
 
-                <form action="{{ route('logout') }}" method="POST">
+                            <i class="fa-solid fa-right-from-bracket"></i>
 
-                    @csrf
+                            <span>Keluar</span>
 
-                    <button type="submit" class="sidebar-link">
+                        </button>
 
-                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </form>
 
-                        <span>Keluar</span>
+                    <div class="sidebar-copyright">
+                        MIYA Sales Insight<br>
+                        &copy; {{ date('Y') }} All Rights Reserved
+                    </div>
 
-                    </button>
-
-                </form>
-
-                <div class="sidebar-copyright">
-                    MIYA Sales Insight<br>
-                    &copy; {{ date('Y') }} All Rights Reserved
                 </div>
 
             </div>
 
-        </div>
+        </aside>
 
-    </aside>
-
-    <!-- =================================
+        <!-- =================================
          MAIN WRAPPER
     ================================== -->
 
-    <div class="main-wrapper">
+        <div class="main-wrapper">
 
-        <!-- NAVBAR -->
-        <nav class="topbar">
+            <!-- NAVBAR -->
+            <nav class="topbar">
 
-            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-3">
 
-                <!-- MOBILE TOGGLE -->
-                <button class="btn-sidebar-toggle d-lg-none"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#sidebar"
-                        aria-controls="sidebar"
-                        aria-label="Buka menu">
+                    <!-- MOBILE TOGGLE -->
+                    <button class="btn-sidebar-toggle d-lg-none" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Buka menu">
 
-                    <i class="fa-solid fa-bars"></i>
+                        <i class="fa-solid fa-bars"></i>
 
-                </button>
+                    </button>
 
-                <div>
+                    <div>
 
-                    <div class="topbar-title">
-                        @yield('page-title', 'Dashboard')
-                    </div>
+                        <div class="topbar-title">
+                            @yield('page-title', 'Dashboard')
+                        </div>
 
-                    <div class="topbar-breadcrumb">
-                        MIYA / @yield('breadcrumb', 'Dashboard')
-                    </div>
+                        <div class="topbar-breadcrumb">
+                            MIYA / @yield('breadcrumb', 'Dashboard')
+                        </div>
 
-                </div>
-
-            </div>
-
-            <!-- PROFILE -->
-            <div class="d-flex align-items-center gap-3">
-
-                <div class="text-end d-none d-sm-block">
-
-                    <div class="user-name">
-                        {{ auth()->user()->name }}
-                    </div>
-
-                    <div class="user-role">
-                        {{ ucfirst(auth()->user()->role) }}
                     </div>
 
                 </div>
 
-                <div class="profile-avatar">
+                <!-- PROFILE -->
+                <div class="d-flex align-items-center gap-3">
 
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    <div class="text-end d-none d-sm-block">
+
+                        <div class="user-name">
+                            {{ auth()->user()->name }}
+                        </div>
+
+                        <div class="user-role">
+                            {{ ucfirst(auth()->user()->role) }}
+                        </div>
+
+                    </div>
+
+                    <div class="profile-avatar">
+
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+
+                    </div>
 
                 </div>
 
-            </div>
+            </nav>
 
-        </nav>
+            <!-- PAGE CONTENT -->
+            <main class="page-content">
 
-        <!-- PAGE CONTENT -->
-        <main class="page-content">
+                @yield('content')
 
-            @yield('content')
+            </main>
 
-        </main>
+            <!-- MAIN FOOTER -->
+            <footer class="main-footer">
 
-        <!-- MAIN FOOTER -->
-        <footer class="main-footer">
+                <span>
+                    Copyright &copy; {{ date('Y') }} MIYA Sales Insight.
+                </span>
 
-            <span>
-                Copyright &copy; {{ date('Y') }} MIYA Sales Insight.
-            </span>
+                <span>
+                    Sales Management System
+                </span>
 
-            <span>
-                Sales Management System
-            </span>
+            </footer>
 
-        </footer>
+        </div>
 
     </div>
 
-</div>
+    <!-- BOOTSTRAP JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- BOOTSTRAP JAVASCRIPT -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-@stack('scripts')
+    @stack('scripts')
 
 </body>
+
 </html>
