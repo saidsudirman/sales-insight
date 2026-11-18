@@ -10,6 +10,8 @@ use App\Models\Ukuran;
 use App\Models\Warna;
 use App\Models\VarianProduk;
 use Illuminate\Support\Str;
+use App\Models\Transaksi;
+use App\Models\DetailTransaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -514,5 +516,280 @@ class ImportPenjualanController extends Controller
                 . ', varian: ' . $created['varian']
                 . '. Silakan periksa kembali hasil validasi.');
     }
+
+
+    public function confirmImport()
+    {
+        $path = session('import_penjualan_path');
+
+        if (!$path || !Storage::disk('local')->exists($path)) {
+            return redirect()
+                ->route('admin.import-penjualan.index')
+                ->with('error', 'File Excel tidak ditemukan. Silakan upload ulang.');
+        }
+
+        $requiredHeaders = [
+            'tanggal_penjualan',
+            'nomor_transaksi',
+            'nama_produk',
+            'kategori',
+            'ukuran',
+            'warna',
+            'harga_jual',
+            'jumlah',
+            'diskon_transaksi',
+        ];
+
+        try {
+            $sheets = Excel::toArray(
+                new PenjualanPreviewImport(),
+                Storage::disk('local')->path($path)
+            );
+
+            $rows = [];
+
+            foreach ($sheets as $sheet) {
+                $sheet = array_values(array_filter($sheet, function ($row) {
+                    return collect($row)->contains(
+                        fn($value) => $value !== null && $value !== ''
+                    );
+                }));
+
+                if (empty($sheet)) {
+                    continue;
+                }
+
+                $headers = array_keys($sheet[0]);
+
+                if (empty(array_diff($requiredHeaders, $headers))) {
+                    $rows = $sheet;
+                    break;
+                }
+            }
+
+            if (empty($rows)) {
+                return back()->with('error', 'Data Excel tidak ditemukan atau format kolom tidak sesuai.');
+            }
+
+            // Validasi ulang sebelum menyimpan.
+            $groupedTransactions = [];
+
+            foreach ($rows as $index => $row) {
+                $line = $index + 2;
+
+                $nomor = trim((string) ($row['nomor_transaksi'] ?? ''));
+                $namaProduk = trim((string) ($row['nama_produk'] ?? ''));
+                $namaKategori = trim((string) ($row['kategori'] ?? ''));
+                $namaUkuran = trim((string) ($row['ukuran'] ?? ''));
+                $namaWarna = trim((string) ($row['warna'] ?? ''));
+
+                if (
+                    $nomor === '' ||
+                    $namaProduk === '' ||
+                    $namaKategori === '' ||
+                    $namaUkuran === '' ||
+                    $namaWarna === ''
+                ) {
+                    throw new \RuntimeException(
+                        "Ada data wajib yang kosong pada baris Excel {$line}."
+                    );
+                }
+
+                // Tanggal.
+                $tanggalAsli = $row['tanggal_penjualan'] ?? null;
+
+                if ($tanggalAsli === null || trim((string) $tanggalAsli) === '') {
+                    throw new \RuntimeException("Tanggal kosong pada baris {$line}.");
+                }
+
+                try {
+                    if (is_numeric($tanggalAsli)) {
+                        $tanggal = ExcelDate::excelToDateTimeObject(
+                            (float) $tanggalAsli
+                        )->format('Y-m-d');
+                    } else {
+                        $tanggal = Carbon::parse($tanggalAsli)->format('Y-m-d');
+                    }
+                } catch (Throwable $e) {
+                    throw new \RuntimeException("Tanggal tidak valid pada baris {$line}.");
+                }
+
+                // Harga dan jumlah.
+                $harga = $row['harga_jual'] ?? null;
+                $jumlah = $row['jumlah'] ?? null;
+                $diskon = $row['diskon_transaksi'] ?? null;
+
+                if (!is_numeric($harga) || $harga < 0) {
+                    throw new \RuntimeException("Harga tidak valid pada baris {$line}.");
+                }
+
+                if (
+                    !is_numeric($jumlah) ||
+                    (float) $jumlah <= 0 ||
+                    (float) $jumlah != (int) $jumlah
+                ) {
+                    throw new \RuntimeException("Jumlah tidak valid pada baris {$line}.");
+                }
+
+                if (!is_numeric($diskon) || $diskon < 0) {
+                    throw new \RuntimeException("Diskon tidak valid pada baris {$line}.");
+                }
+
+                // Cari master data.
+                $produk = Produk::whereRaw(
+                    'LOWER(TRIM(nama_produk)) = ?',
+                    [mb_strtolower($namaProduk)]
+                )->first();
+
+                $kategori = Kategori::whereRaw(
+                    'LOWER(TRIM(nama_kategori)) = ?',
+                    [mb_strtolower($namaKategori)]
+                )->first();
+
+                $ukuran = Ukuran::whereRaw(
+                    'LOWER(TRIM(nama_ukuran)) = ?',
+                    [mb_strtolower($namaUkuran)]
+                )->first();
+
+                $warna = Warna::whereRaw(
+                    'LOWER(TRIM(nama_warna)) = ?',
+                    [mb_strtolower($namaWarna)]
+                )->first();
+
+                if (!$produk || !$kategori || !$ukuran || !$warna) {
+                    throw new \RuntimeException(
+                        "Master data belum lengkap pada baris {$line}."
+                    );
+                }
+
+                if ($produk->kategori_id != $kategori->id) {
+                    throw new \RuntimeException(
+                        "Kategori produk tidak sesuai pada baris {$line}."
+                    );
+                }
+
+                $varian = VarianProduk::where('produk_id', $produk->id)
+                    ->where('ukuran_id', $ukuran->id)
+                    ->where('warna_id', $warna->id)
+                    ->first();
+
+                if (!$varian) {
+                    throw new \RuntimeException(
+                        "Varian produk belum tersedia pada baris {$line}."
+                    );
+                }
+
+                $subtotal = (float) $harga * (int) $jumlah;
+
+                if (!isset($groupedTransactions[$nomor])) {
+                    $groupedTransactions[$nomor] = [
+                        'tanggal' => $tanggal,
+                        'diskon' => (float) $diskon,
+                        'details' => [],
+                    ];
+                } else {
+                    if ($groupedTransactions[$nomor]['tanggal'] !== $tanggal) {
+                        throw new \RuntimeException(
+                            "Nomor transaksi {$nomor} memiliki tanggal berbeda."
+                        );
+                    }
+
+                    // Diskon transaksi harus dicantumkan satu kali saja.
+                    if ((float) $diskon > 0) {
+                        throw new \RuntimeException(
+                            "Diskon transaksi {$nomor} tercatat lebih dari satu kali. Isi diskon hanya pada baris pertama transaksi."
+                        );
+                    }
+                }
+
+                $groupedTransactions[$nomor]['details'][] = [
+                    'varian_produk_id' => $varian->id,
+                    'jumlah' => (int) $jumlah,
+                    'harga_satuan' => (float) $harga,
+                    'subtotal' => $subtotal,
+                ];
+            }
+
+            if (empty($groupedTransactions)) {
+                throw new \RuntimeException('Tidak ada data transaksi untuk diimpor.');
+            }
+
+            // Cegah duplikasi nomor transaksi.
+            $nomorTransaksis = array_keys($groupedTransactions);
+
+            $existing = Transaksi::whereIn(
+                'nomor_transaksi',
+                $nomorTransaksis
+            )->pluck('nomor_transaksi')->all();
+
+            if (!empty($existing)) {
+                throw new \RuntimeException(
+                    'Nomor transaksi berikut sudah pernah diimpor: '
+                    . implode(', ', $existing)
+                );
+            }
+
+            $totalTransaksi = 0;
+            $totalDetail = 0;
+
+            DB::transaction(function () use ($groupedTransactions, &$totalTransaksi, &$totalDetail) {
+                foreach ($groupedTransactions as $nomor => $transactionData) {
+                    $totalHarga = collect($transactionData['details'])
+                        ->sum('subtotal');
+
+                    $diskon = $transactionData['diskon'];
+
+                    if ($diskon > $totalHarga) {
+                        throw new \RuntimeException(
+                            "Diskon transaksi {$nomor} melebihi total harga."
+                        );
+                    }
+
+                    $transaksi = Transaksi::create([
+                        'pelanggan_id' => null,
+                        'user_id' => auth()->id(),
+                        'nomor_transaksi' => $nomor,
+                        'tanggal_transaksi' => $transactionData['tanggal'],
+                        'total_harga' => $totalHarga,
+                        'diskon' => $diskon,
+                        'grand_total' => $totalHarga - $diskon,
+                        'metode_pembayaran' => null,
+                        'catatan' => 'Diimpor dari data historis Excel.',
+                    ]);
+
+                    foreach ($transactionData['details'] as $detail) {
+                        DetailTransaksi::create([
+                            'transaksi_id' => $transaksi->id,
+                            'varian_produk_id' => $detail['varian_produk_id'],
+                            'jumlah' => $detail['jumlah'],
+                            'harga_satuan' => $detail['harga_satuan'],
+                            'subtotal' => $detail['subtotal'],
+                        ]);
+
+                        $totalDetail++;
+                    }
+
+                    $totalTransaksi++;
+                }
+            });
+
+            // Hapus file sementara setelah import berhasil.
+            Storage::disk('local')->delete($path);
+            session()->forget('import_penjualan_path');
+
+            return redirect()
+                ->route('admin.import-penjualan.index')
+                ->with(
+                    'success',
+                    "Import berhasil! {$totalTransaksi} transaksi dan {$totalDetail} detail transaksi berhasil disimpan."
+                );
+
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.import-penjualan.preview')
+                ->with('error', 'Import gagal: ' . $e->getMessage());
+        }
+    }
+
 
 }

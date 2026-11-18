@@ -146,6 +146,42 @@
 
         @endif
 
+{{-- Konfirmasi import --}}
+@if($totalRows > 0 && $totalInvalid === 0 && count($missingHeaders) === 0)
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+            <div>
+                <h6 class="fw-bold mb-1">
+                    <i class="fas fa-database text-success me-2"></i>
+                    Data Siap Diimpor
+                </h6>
+
+                <p class="text-muted small mb-0">
+                    Seluruh {{ $totalRows }} baris data lolos validasi.
+                    Pastikan data sudah benar sebelum disimpan.
+                </p>
+            </div>
+
+            <form action="{{ route('admin.import-penjualan.confirm') }}"
+                  method="POST"
+                  onsubmit="return confirm('Yakin ingin menyimpan data historis penjualan ini ke database? Nomor transaksi yang sudah pernah diimpor akan ditolak.');">
+
+                @csrf
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Konfirmasi Import
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+@endif
+
 
         {{-- Tabel preview --}}
         <div class="card border-0 shadow-sm">

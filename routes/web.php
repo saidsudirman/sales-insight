@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\ProdukController;
@@ -43,10 +44,8 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:admin')
         ->group(function () {
 
-            Route::get('/dashboard', function () {
-                return view('admin.dashboard');
-            })->name('dashboard');
-
+            Route::get('/dashboard', [DashboardController::class, 'index'])
+                ->name('dashboard');
             Route::patch('/kategoris/{kategori}/toggle-status', [
                 KategoriController::class,
                 'toggleStatus'
@@ -97,6 +96,8 @@ Route::middleware('auth')->group(function () {
                 ->name('import-penjualan.preview');
             Route::post('/import-penjualan/prepare-master', [ImportPenjualanController::class, 'prepareMasterData'])
                 ->name('import-penjualan.prepare-master');
+            Route::post('/import-penjualan/confirm', [ImportPenjualanController::class, 'confirmImport'])
+                ->name('import-penjualan.confirm');
         });
 
     Route::prefix('pemilik')
