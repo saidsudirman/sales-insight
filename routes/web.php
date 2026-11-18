@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\UkuranController;
+use App\Http\Controllers\Admin\WarnaController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -49,12 +50,20 @@ Route::middleware('auth')->group(function () {
 
             Route::resource('kategoris', KategoriController::class)
                 ->except(['show']);
-                Route::patch('/ukurans/{ukuran}/toggle-status', [
-    UkuranController::class,
-    'toggleStatus'
-])->name('ukurans.toggle-status');
+            Route::patch('/ukurans/{ukuran}/toggle-status', [
+                UkuranController::class,
+                'toggleStatus'
+            ])->name('ukurans.toggle-status');
 
-Route::resource('ukurans', UkuranController::class)
+            Route::resource('ukurans', UkuranController::class)
+                ->except(['show']);
+
+                Route::patch('/warnas/{warna}/toggle-status', [
+    WarnaController::class,
+    'toggleStatus'
+])->name('warnas.toggle-status');
+
+Route::resource('warnas', WarnaController::class)
     ->except(['show']);
         });
 

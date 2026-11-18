@@ -528,7 +528,7 @@
                     <span>Ukuran</span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('admin.warnas.index') }}" class="sidebar-link">
                     <i class="fa-solid fa-palette"></i>
                     <span>Warna</span>
                 </a>
