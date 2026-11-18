@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\UkuranController;
 use App\Http\Controllers\Admin\WarnaController;
 use App\Http\Controllers\AuthController;
@@ -58,12 +59,19 @@ Route::middleware('auth')->group(function () {
             Route::resource('ukurans', UkuranController::class)
                 ->except(['show']);
 
-                Route::patch('/warnas/{warna}/toggle-status', [
-    WarnaController::class,
-    'toggleStatus'
-])->name('warnas.toggle-status');
+            Route::patch('/warnas/{warna}/toggle-status', [
+                WarnaController::class,
+                'toggleStatus'
+            ])->name('warnas.toggle-status');
 
-Route::resource('warnas', WarnaController::class)
+            Route::resource('warnas', WarnaController::class)
+                ->except(['show']);
+                Route::patch('/produks/{produk}/toggle-status', [
+    ProdukController::class,
+    'toggleStatus'
+])->name('produks.toggle-status');
+
+Route::resource('produks', ProdukController::class)
     ->except(['show']);
         });
 

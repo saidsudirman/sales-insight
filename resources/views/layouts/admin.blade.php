@@ -518,7 +518,7 @@
                     <span>Kategori</span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('admin.produks.index') }}" class="sidebar-link">
                     <i class="fa-solid fa-box"></i>
                     <span>Produk</span>
                 </a>
