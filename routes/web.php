@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\UkuranController;
+use App\Http\Controllers\Admin\VarianProdukController;
 use App\Http\Controllers\Admin\WarnaController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
@@ -66,13 +68,21 @@ Route::middleware('auth')->group(function () {
 
             Route::resource('warnas', WarnaController::class)
                 ->except(['show']);
-                Route::patch('/produks/{produk}/toggle-status', [
-    ProdukController::class,
-    'toggleStatus'
-])->name('produks.toggle-status');
+            Route::patch('/produks/{produk}/toggle-status', [
+                ProdukController::class,
+                'toggleStatus'
 
-Route::resource('produks', ProdukController::class)
-    ->except(['show']);
+            ])->name('produks.toggle-status');
+
+            Route::resource('produks', ProdukController::class)
+                ->except(['show']);
+            Route::patch('/varian-produks/{varianProduk}/toggle-status', [VarianProdukController::class, 'toggleStatus'])
+                ->name('varian-produks.toggle-status');
+
+            Route::resource('varian-produks', VarianProdukController::class)
+                ->except(['show']);
+            Route::resource('pelanggans', PelangganController::class)
+                ->except(['show']);
         });
 
     Route::prefix('pemilik')

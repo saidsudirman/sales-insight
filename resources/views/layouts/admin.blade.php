@@ -533,12 +533,12 @@
                     <span>Warna</span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('admin.varian-produks.index') }}" class="sidebar-link">
                     <i class="fa-solid fa-layer-group"></i>
                     <span>Varian Produk</span>
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('admin.pelanggans.index') }}" class="sidebar-link">
                     <i class="fa-solid fa-users"></i>
                     <span>Pelanggan</span>
                 </a>
